@@ -129,8 +129,3 @@ Sure! Here's the full README in one markdown block:
 ### News Integration
 - **Frontend:** React components display news articles related to selected stocks.
 - **Backend:** Celery handles asynchronous tasks to fetch and aggregate news from various sources. Django serves the news data through API endpoints.
-
----
-
-By following this guide and building StockSense, you'll gain practical experience in full-stack development, integrating AI, and handling large datasets. This project is designed to be completed within one and a half months, considering your current experience level. Happy coding!
-```

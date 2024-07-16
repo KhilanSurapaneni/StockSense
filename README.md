@@ -12,8 +12,6 @@ Sure! Here's the full README in one markdown block:
 - [Setup and Installation](#setup-and-installation)
 - [Usage](#usage)
 - [Behind the Scenes](#behind-the-scenes)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 ### User Authentication
@@ -131,12 +129,6 @@ Sure! Here's the full README in one markdown block:
 ### News Integration
 - **Frontend:** React components display news articles related to selected stocks.
 - **Backend:** Celery handles asynchronous tasks to fetch and aggregate news from various sources. Django serves the news data through API endpoints.
-
-## Contributing
-We welcome contributions from the community. Please read our [contributing guidelines](CONTRIBUTING.md) for more details.
-
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 

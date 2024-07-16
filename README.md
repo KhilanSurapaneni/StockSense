@@ -1,6 +1,3 @@
-Sure! Here's the full README in one markdown block:
-
-
 # StockSense: AI-Powered Stock Market Analysis and Prediction
 
 ## Introduction
@@ -50,7 +47,7 @@ Sure! Here's the full README in one markdown block:
 - **MongoDB:** Storing user data, stock information, and historical data.
 
 ### AI and Machine Learning
-- **PyTorch:** Building and training machine learning models for stock price predictions.
+- **PyTorch:** Fine-tuning a Long Short-Term Memory (LSTM) model for stock price predictions.
 - **Pandas/Numpy:** Data manipulation and preprocessing.
 
 ## Setup and Installation
@@ -124,7 +121,7 @@ Sure! Here's the full README in one markdown block:
 
 ### AI Predictions
 - **Frontend:** Users request predictions through React components. Predicted data is displayed on charts.
-- **Backend:** Historical data is preprocessed using Pandas and Numpy. Machine learning models are built and trained using PyTorch. Predictions are served through API endpoints.
+- **Backend:** Historical data is preprocessed using Pandas and Numpy. Machine learning models are built and trained using PyTorch, specifically fine-tuning a Long Short-Term Memory (LSTM) model for stock price predictions. Predictions are served through API endpoints.
 
 ### News Integration
 - **Frontend:** React components display news articles related to selected stocks.

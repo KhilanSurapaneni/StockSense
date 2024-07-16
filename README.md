@@ -122,6 +122,7 @@
 ### AI Predictions
 - **Frontend:** Users request predictions through React components. Predicted data is displayed on charts.
 - **Backend:** Historical data is preprocessed using Pandas and Numpy. Machine learning models are built and trained using PyTorch, specifically fine-tuning a Long Short-Term Memory (LSTM) model for stock price predictions. Predictions are served through API endpoints.
+- [**Dataset**](https://www.kaggle.com/datasets/borismarjanovic/price-volume-data-for-all-us-stocks-etfs/data)
 
 ### News Integration
 - **Frontend:** React components display news articles related to selected stocks.

@@ -34,7 +34,7 @@
 
 ## Tech Stack
 ### Frontend
-- **React (TypeScript):** Building user interfaces.
+- **React.js:** Building user interfaces.
 - **Axios:** Making HTTP requests to the backend API.
 - **Chart.js:** Visualizing stock data through interactive charts.
 

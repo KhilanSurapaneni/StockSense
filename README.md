@@ -34,7 +34,7 @@
 
 ## Tech Stack
 ### Frontend
-- **React (TypeScript):** Building user interfaces.
+- **React.js:** Building user interfaces.
 - **Axios:** Making HTTP requests to the backend API.
 - **Chart.js:** Visualizing stock data through interactive charts.
 
@@ -44,7 +44,7 @@
 - **Celery:** Task queue for handling asynchronous tasks (e.g., fetching news).
 
 ### Database
-- **MongoDB:** Storing user data, stock information, and historical data.
+- **PostgreSQL:** Storing user data, stock information, and historical data.
 
 ### AI and Machine Learning
 - **PyTorch:** Fine-tuning a Long Short-Term Memory (LSTM) model for stock price predictions.

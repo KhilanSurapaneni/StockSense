@@ -44,7 +44,7 @@
 - **Celery:** Task queue for handling asynchronous tasks (e.g., fetching news).
 
 ### Database
-- **MongoDB:** Storing user data, stock information, and historical data.
+- **PostgreSQL:** Storing user data, stock information, and historical data.
 
 ### AI and Machine Learning
 - **PyTorch:** Fine-tuning a Long Short-Term Memory (LSTM) model for stock price predictions.

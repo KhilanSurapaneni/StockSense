@@ -3,7 +3,9 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
-from .serializers import UserSerializer, ChangePasswordSerializer
+from .serializers import UserSerializer, ChangePasswordSerializer, BasicTickerDataSerializer, HistoricalDataSerializer, DetailedTickerDataSerializer, FavoriteStockSerializer
+from .models import BasicTickerData, DetailedTickerData, HistoricalData, FavoriteStock
+from datetime import date
 
 # Registering a User
 class CreateUserView(generics.CreateAPIView):

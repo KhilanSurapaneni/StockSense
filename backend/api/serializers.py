@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from .models import BasicTickerData, DetailedTickerData, HistoricalData, FavoriteStock
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)  # Password field, write-only and not required
@@ -60,3 +61,42 @@ class ChangePasswordSerializer(serializers.Serializer):
         except ValidationError as e:
             raise serializers.ValidationError(e.messages)
         return value
+
+class BasicTickerDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BasicTickerData
+        fields = ['id', 'symbol', 'exchange', 'exchangeShortName', 'name', 'price']
+
+class DetailedTickerDataSerializer(serializers.ModelSerializer):
+    basic_data = BasicTickerDataSerializer()
+
+    class Meta:
+        model = DetailedTickerData
+        fields = [
+            'id', 'basic_data', 'beta', 'volAvg', 'mktCap', 'lastDiv', 'range', 'changes',
+            'companyName', 'currency', 'cik', 'isin', 'cusip', 'industry', 'website',
+            'description', 'ceo', 'sector', 'country', 'fullTimeEmployees', 'phone',
+            'address', 'city', 'state', 'zip', 'dcfDiff', 'dcf', 'image', 'ipoDate',
+            'defaultImage', 'isEtf', 'isActivelyTrading', 'isAdr', 'isFund'
+        ]
+
+class HistoricalDataSerializer(serializers.ModelSerializer):
+    basic_data = BasicTickerDataSerializer()
+    detailed_data = DetailedTickerDataSerializer()
+
+    class Meta:
+        model = HistoricalData
+        fields = [
+            'id', 'basic_data', 'detailed_data', 'date', 'open_price', 'high_price',
+            'low_price', 'close_price', 'adj_close_price', 'volume', 'unadjusted_volume',
+            'change', 'change_percent', 'vwap', 'label', 'change_over_time'
+        ]
+
+class FavoriteStockSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    basic_data = BasicTickerDataSerializer()
+    detailed_data = DetailedTickerDataSerializer()
+
+    class Meta:
+        model = FavoriteStock
+        fields = ['id', 'user', 'basic_data', 'detailed_data', 'favorited_at']

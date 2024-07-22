@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',  # Session framework.
     'django.contrib.messages',  # Messaging framework.
     'django.contrib.staticfiles',  # Framework for serving static files.
-    "api",  # Our custom app named 'api'.
+    "api",  # Our custom app named 'api' this is where the authentication stuff will be hosted.
     "rest_framework",  # Django REST framework.
     "corsheaders"  # Handling Cross-Origin Resource Sharing (CORS).
 ]

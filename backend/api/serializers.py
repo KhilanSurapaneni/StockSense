@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from .models import BasicTickerData, DetailedTickerData, HistoricalData, FavoriteStock
+from .models import BasicTickerData, DetailedTickerData, HistoricalTickerData, FavoriteTickerData
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)  # Password field, write-only and not required
@@ -65,7 +65,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 class BasicTickerDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = BasicTickerData
-        fields = ['id', 'symbol', 'exchange', 'exchangeShortName', 'name', 'price']
+        fields = ['id', 'symbol', 'exchange', 'exchangeShortName', 'name', 'price', 'type']
 
 class DetailedTickerDataSerializer(serializers.ModelSerializer):
     basic_data = BasicTickerDataSerializer()
@@ -73,30 +73,28 @@ class DetailedTickerDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = DetailedTickerData
         fields = [
-            'id', 'basic_data', 'beta', 'volAvg', 'mktCap', 'lastDiv', 'range', 'changes',
-            'companyName', 'currency', 'cik', 'isin', 'cusip', 'industry', 'website',
-            'description', 'ceo', 'sector', 'country', 'fullTimeEmployees', 'phone',
-            'address', 'city', 'state', 'zip', 'dcfDiff', 'dcf', 'image', 'ipoDate',
-            'defaultImage', 'isEtf', 'isActivelyTrading', 'isAdr', 'isFund'
+            'id', 'basic_data', 'currency', 'changes', 'ipoDate', 'beta', 'volAvg', 'mktCap', 'lastDiv', 'range',
+            'cik', 'cusip', 'industry', 'website', 'description', 'ceo', 'sector', 'country', 'fullTimeEmployees',
+            'phone', 'address', 'city', 'state', 'zip', 'dcfDiff', 'dcf', 'image', 'defaultImage', 'isEtf',
+            'isActivelyTrading', 'isAdr', 'isFund', 'isin'
         ]
 
-class HistoricalDataSerializer(serializers.ModelSerializer):
+class HistoricalTickerDataSerializer(serializers.ModelSerializer):
     basic_data = BasicTickerDataSerializer()
     detailed_data = DetailedTickerDataSerializer()
 
     class Meta:
-        model = HistoricalData
+        model = HistoricalTickerData
         fields = [
-            'id', 'basic_data', 'detailed_data', 'date', 'open_price', 'high_price',
-            'low_price', 'close_price', 'adj_close_price', 'volume', 'unadjusted_volume',
-            'change', 'change_percent', 'vwap', 'label', 'change_over_time'
+            'id', 'basic_data', 'detailed_data', 'date', 'open', 'high', 'low', 'close', 'adjClose', 'volume',
+            'unadjustedVolume', 'change', 'changePercent', 'vwap', 'label', 'changeOverTime'
         ]
 
-class FavoriteStockSerializer(serializers.ModelSerializer):
+class FavoriteTickerDataSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     basic_data = BasicTickerDataSerializer()
     detailed_data = DetailedTickerDataSerializer()
 
     class Meta:
-        model = FavoriteStock
+        model = FavoriteTickerData
         fields = ['id', 'user', 'basic_data', 'detailed_data', 'favorited_at']

@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 import requests
 import os
 from ...models import BasicTickerData, DetailedTickerData, HistoricalTickerData, FavoriteTickerData
+from django.contrib.auth.models import User
 
 class Command(BaseCommand):
     help = 'Seed the database with initial data'
@@ -11,6 +12,7 @@ class Command(BaseCommand):
         DetailedTickerData.objects.all().delete()
         HistoricalTickerData.objects.all().delete()
         FavoriteTickerData.objects.all().delete()
+        User.objects.all().delete()
 
         self.stdout.write(self.style.SUCCESS("Deleted all data from the database."))
 
@@ -20,7 +22,7 @@ class Command(BaseCommand):
             seed_basic_ticker_data()
             self.stdout.write(self.style.SUCCESS('Basic Ticker Data seeding completed.'))
 
-            seed_detailed_ticker_data(num_tickers=20)
+            seed_detailed_ticker_data(num_tickers=5)
             self.stdout.write(self.style.SUCCESS('Detailed Ticker Data seeding completed.'))
 
             detailed_ticker_data = DetailedTickerData.objects.all()
@@ -29,6 +31,9 @@ class Command(BaseCommand):
                 seed_historical_ticker_data(ticker.basic_data.symbol)
 
             self.stdout.write(self.style.SUCCESS('Historical Ticker Data seeding completed.'))
+
+            seed_favorite_ticker_data()
+            self.stdout.write(self.style.SUCCESS('Favorite Ticker Data seeding completed.'))
 
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"An error occurred: {e}"))
@@ -98,3 +103,41 @@ def seed_historical_ticker_data(symbol):
             basic_data=basic_info,
             detailed_data=detailed_info
         )
+
+def create_users():
+    user_data_1 = {
+            "username": "testuser1",
+            "email": "testuser1@example.com",
+            "password": "Testpassword123!",
+            "first_name": "Test1",
+            "last_name": "User1",
+        }
+    user_data_2 = {
+            "username": "testuser2",
+            "email": "testuser2@example.com",
+            "password": "Testpassword123!",
+            "first_name": "Test2",
+            "last_name": "User2",
+        }
+    user1 = User.objects.create_user(
+        **user_data_1
+    )
+
+    user2 = User.objects.create_user(
+        **user_data_2
+    )
+    return user1.id, user2.id
+
+def seed_favorite_ticker_data():
+    user_id_1, user_id_2 = create_users()
+
+    for ticker in BasicTickerData.objects.all()[:3]:
+        FavoriteTickerData.objects.create(
+            user_id=user_id_1,
+            basic_data=ticker
+        )
+    for ticker in BasicTickerData.objects.all()[3:6]:
+        FavoriteTickerData.objects.create(
+            user_id=user_id_2,
+            basic_data=ticker
+        ) 

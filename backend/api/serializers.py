@@ -80,21 +80,18 @@ class DetailedTickerDataSerializer(serializers.ModelSerializer):
         ]
 
 class HistoricalTickerDataSerializer(serializers.ModelSerializer):
-    basic_data = BasicTickerDataSerializer()
-    detailed_data = DetailedTickerDataSerializer()
 
     class Meta:
         model = HistoricalTickerData
         fields = [
-            'id', 'basic_data', 'detailed_data', 'date', 'open', 'high', 'low', 'close', 'adjClose', 'volume',
+            'id', 'date', 'open', 'high', 'low', 'close', 'adjClose', 'volume',
             'unadjustedVolume', 'change', 'changePercent', 'vwap', 'label', 'changeOverTime'
         ]
 
 class FavoriteTickerDataSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     basic_data = BasicTickerDataSerializer()
-    detailed_data = DetailedTickerDataSerializer()
 
     class Meta:
         model = FavoriteTickerData
-        fields = ['id', 'user', 'basic_data', 'detailed_data', 'favorited_at']
+        fields = ['id', 'user', 'basic_data', 'favorited_at']

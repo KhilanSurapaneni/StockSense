@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # Load using Actively Traded List API
 
 # The goal is to load this from the FMP API once every single day, it will return this data for EVERY ticker and only count as a singular API call, we will be filtering this to NYSE and NASDAQ only
-# Additionally, we will only support actively traded stocks
+# Additionally, we will only support actively traded stocks only
 class BasicTickerData(models.Model):
     symbol = models.CharField(max_length=10)
     name = models.CharField(max_length=100)
@@ -102,7 +102,6 @@ class HistoricalTickerData(models.Model):
 class FavoriteTickerData(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorite_stocks')
     basic_data = models.ForeignKey(BasicTickerData, on_delete=models.CASCADE, related_name='favorited_by_users')
-    detailed_data = models.ForeignKey(DetailedTickerData, on_delete=models.CASCADE, related_name='favorited_by_users')
     favorited_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

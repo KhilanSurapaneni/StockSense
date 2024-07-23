@@ -1,13 +1,14 @@
 from django.core.management.base import BaseCommand
 import requests
 import os
-from ...models import BasicTickerData, DetailedTickerData, HistoricalTickerData, FavoriteTickerData
+from ...models import BasicTickerData, DetailedTickerData, HistoricalTickerData, FavoriteTickerData, GeneralNews
 from django.contrib.auth.models import User
 
 class Command(BaseCommand):
     help = 'Seed the database with initial data'
 
     def handle(self, *args, **kwargs):
+        GeneralNews.objects.all().delete()
         BasicTickerData.objects.all().delete()
         DetailedTickerData.objects.all().delete()
         HistoricalTickerData.objects.all().delete()
@@ -19,10 +20,13 @@ class Command(BaseCommand):
         self.stdout.write('Seeding the database...')
 
         try:
+            seed_general_news()
+            self.stdout.write(self.style.SUCCESS('General News seeding completed.'))
+
             seed_basic_ticker_data()
             self.stdout.write(self.style.SUCCESS('Basic Ticker Data seeding completed.'))
 
-            seed_detailed_ticker_data(num_tickers=5)
+            seed_detailed_ticker_data()
             self.stdout.write(self.style.SUCCESS('Detailed Ticker Data seeding completed.'))
 
             detailed_ticker_data = DetailedTickerData.objects.all()
@@ -61,14 +65,17 @@ def seed_basic_ticker_data():
 
 
 def seed_detailed_ticker_data(num_tickers=None):
-    tickers = BasicTickerData.objects.all()
+    tickers = ["AAPL", "NVDA", "TSLA", "MSFT", "AMZN"]
+    # tickers = BasicTickerData.objects.all()
 
-    if num_tickers is None:
-        num_tickers = len(tickers)
+    # if num_tickers is None:
+    #     num_tickers = len(tickers)
     
-    for ticker in tickers[:num_tickers]:
+    for ticker in tickers:
+    # for ticker in tickers[:num_tickers]:
         try:
-            response = requests.get(f"https://financialmodelingprep.com/api/v3/profile/{ticker.symbol}?apikey={os.environ.get('FMP_API_KEY')}")
+            response = requests.get(f"https://financialmodelingprep.com/api/v3/profile/{ticker}?apikey={os.environ.get('FMP_API_KEY')}")
+            # response = requests.get(f"https://financialmodelingprep.com/api/v3/profile/{ticker.symbol}?apikey={os.environ.get('FMP_API_KEY')}")
             response.raise_for_status()
             detailed_data = response.json()[0]
         except requests.RequestException as e:
@@ -80,9 +87,11 @@ def seed_detailed_ticker_data(num_tickers=None):
         detailed_data.pop("exchangeShortName", None)
         detailed_data.pop("companyName", None)
         
+        basic_data = BasicTickerData.objects.get(symbol=ticker)
+
         DetailedTickerData.objects.create(
             **detailed_data,
-            basic_data=ticker,
+            basic_data=basic_data,
         )
 
 
@@ -140,4 +149,17 @@ def seed_favorite_ticker_data():
         FavoriteTickerData.objects.create(
             user_id=user_id_2,
             basic_data=ticker
-        ) 
+        )
+
+def seed_general_news():
+    try:
+        respose = requests.get(f"https://newsapi.org/v2/top-headlines?country=us&apiKey={os.environ.get("NEWS_API_KEY")}&category=business").json()["articles"]
+
+        for article in respose:
+            article.pop("source", None)
+
+            GeneralNews.objects.create(
+                **article
+            )
+    except requests.RequestException as e:
+        raise Exception(f"Failed to fetch general news: {e}")

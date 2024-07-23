@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from .models import BasicTickerData, DetailedTickerData, HistoricalTickerData, FavoriteTickerData
+from .models import BasicTickerData, DetailedTickerData, HistoricalTickerData, FavoriteTickerData, GeneralNews
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)  # Password field, write-only and not required
@@ -95,3 +95,9 @@ class FavoriteTickerDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteTickerData
         fields = ['id', 'user', 'basic_data', 'favorited_at']
+
+class GeneralNewsSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = GeneralNews
+        fields = ['id', 'author', 'title', 'url', 'publishedAt', 'urlToImage', 'description', 'content']

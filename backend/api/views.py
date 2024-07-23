@@ -3,10 +3,10 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
-from .serializers import UserSerializer, ChangePasswordSerializer, BasicTickerDataSerializer, HistoricalTickerDataSerializer, DetailedTickerDataSerializer, FavoriteTickerDataSerializer
-from .models import BasicTickerData, DetailedTickerData, HistoricalTickerData, FavoriteTickerData
+from .serializers import UserSerializer, ChangePasswordSerializer, BasicTickerDataSerializer, HistoricalTickerDataSerializer, DetailedTickerDataSerializer, FavoriteTickerDataSerializer, GeneralNewsSerializer
+from .models import BasicTickerData, DetailedTickerData, HistoricalTickerData, FavoriteTickerData, GeneralNews
 from datetime import date, timedelta
-from .helper_functions import get_detailed_data, get_historical_data, is_most_recent_friday
+from .helpers.helper_functions import get_detailed_data, get_historical_data, is_most_recent_friday, fetch_news_articles
 
 # Registering a User
 class CreateUserView(generics.CreateAPIView):
@@ -79,17 +79,78 @@ class CombinedTickerDetailView(APIView):
             basic_info = BasicTickerDataSerializer(ticker_info).data
             detailed_info = DetailedTickerDataSerializer(detailed_data).data
 
+            # Fetch the latest news articles for the ticker
+            news_articles = fetch_news_articles(ticker_info.symbol)
+
             # Return combined response
             return Response({
                 'basic_info': basic_info,
                 'detailed_info': detailed_info,
-                'historical_info': historical_info
+                'news' : news_articles,
+                'historical_info': historical_info,
             }, status=status.HTTP_200_OK)
         
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+# Returning the dashboard data for the user, information about their favorite tickers if they are logged in, otherwise it returns popular tickers, news articles, and top stories/news about business, returns detailed data and basic data
+class DashboardView(APIView):
+    permission_classes = [AllowAny]
 
+    def get(self, request):
+        req = {}
+        if request.user.is_authenticated:
+            user_id = self.request.user.id
+
+            # Get all the favorite tickers for the current user
+            favorite_tickers = FavoriteTickerData.objects.filter(user_id=user_id)
+
+            for ticker in favorite_tickers:
+                try:
+                    # Get the BasicTickerData object from the database
+                    basic_data = BasicTickerData.objects.get(symbol=ticker.basic_data.symbol)
+
+                    # Get the detailed data for the ticker
+                    if DetailedTickerData.objects.filter(basic_data=basic_data).exists():
+                        detailed_data = DetailedTickerData.objects.get(basic_data=basic_data)
+                    else:
+                        detailed_data = get_detailed_data(ticker.basic_data.symbol)
+
+                    req[ticker.basic_data.symbol] = {
+                        "basic_data": BasicTickerDataSerializer(basic_data).data,
+                        "detailed_data": DetailedTickerDataSerializer(detailed_data).data,
+                    }
+                except Exception as e:
+                    return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            tickers = ["AAPL", "NVDA", "TSLA", "MSFT", "AMZN"]
+
+            for ticker in tickers:
+                try:
+                    # Get the BasicTickerData object from the database
+                    basic_data = BasicTickerData.objects.get(symbol=ticker)
+
+                    # Get the detailed data for the ticker
+                    detailed_data = DetailedTickerData.objects.get(basic_data=basic_data)
+
+                    req[ticker] = {
+                        "basic_data": BasicTickerDataSerializer(basic_data).data,
+                        "detailed_data": DetailedTickerDataSerializer(detailed_data).data,
+                    }
+                except Exception as e:
+                    return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        news = GeneralNews.objects.all()
+        news_articles = []
+
+        for article in news:
+            news_articles.append(GeneralNewsSerializer(article).data)
+        
+        req["news"] = news_articles
+
+        return Response(req, status=status.HTTP_200_OK)
+
+# Returns favorite tickers for the user, must be logged in to access this view
 class FavoriteTickersView(APIView):
     permission_classes = [IsAuthenticated]  # Only authenticated users can access this view
 
@@ -98,10 +159,13 @@ class FavoriteTickersView(APIView):
             # Get the current logged-in user
             user_id = self.request.user.id
             # Get all the favorite tickers for the current user
-            favorite_tickers = FavoriteTickerData.objects.filter(user_id=user_id)
-            # Serialize the favorite tickers
-            serializer = FavoriteTickerDataSerializer(favorite_tickers, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            if FavoriteTickerData.objects.filter(user_id=user_id).exists():
+                favorite_tickers = FavoriteTickerData.objects.filter(user_id=user_id)
+                # Serialize the favorite tickers
+                serializer = FavoriteTickerDataSerializer(favorite_tickers, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "No favorite tickers found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
@@ -141,5 +205,30 @@ class FavoriteTickersView(APIView):
             return Response({"message": "Ticker removed from favorites."}, status=status.HTTP_200_OK)
         except BasicTickerData.DoesNotExist:
             return Response({"error": "Ticker not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# Search for tickers by symbol, returns a list of tickers that match the search query
+class TickerSearchView(APIView):
+    permission_classes = [AllowAny]  # Allow any user to access this view (no authentication required)
+
+    def get(self, request):
+        try:
+            # Get the search query and limit from the request query parameters
+            search_query = request.query_params.get('search_query', "")
+            limit = int(request.query_params.get('limit', 10))  # Default to 10 results if not specified
+            
+            if search_query != "":
+                # Search for tickers that match the search query
+                matching_tickers = BasicTickerData.objects.filter(symbol__icontains=search_query)[:limit]
+                if matching_tickers.count() == 0:
+                    return Response({"message": "No results found."}, status=status.HTTP_404_NOT_FOUND)
+                # Serialize the matching tickers
+                serializer = BasicTickerDataSerializer(matching_tickers, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "No results found."}, status=status.HTTP_404_NOT_FOUND)
+        
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -12,6 +12,7 @@ class BasicTickerData(models.Model):
     exchange = models.CharField(max_length=50)
     exchangeShortName = models.CharField(max_length=20)
     type = models.CharField(max_length=10)
+    updated_at = models.DateField(auto_now=True)
     # detailed_data will be able to be accessed on this model, if it is null, then it hasn't been loaded yet, must make API call
     def __str__(self):
         return f"{self.symbol} - {self.name}"
@@ -69,6 +70,9 @@ class DetailedTickerData(models.Model):
     image = models.URLField(max_length=200, blank=True, null=True)
     defaultImage = models.BooleanField(blank=True, null=True)
 
+    # Updated at
+    updated_at = models.DateField(auto_now=True)
+
     def __str__(self):
         return f"{self.basic_data.symbol} - Detailed Data"
 
@@ -104,5 +108,22 @@ class FavoriteTickerData(models.Model):
     basic_data = models.ForeignKey(BasicTickerData, on_delete=models.CASCADE, related_name='favorited_by_users')
     favorited_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('user', 'basic_data')
+
     def __str__(self):
         return f"{self.user.username} - {self.basic_data.symbol}"
+    
+class GeneralNews(models.Model):
+    author = models.CharField(max_length=255)  # Adding a max_length constraint
+    title = models.TextField()
+    url = models.URLField(unique=True)  # Ensuring each URL is unique
+    publishedAt = models.DateTimeField()
+    urlToImage = models.URLField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    content = models.TextField(blank=True, null=True)
+    updated_at = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.author}"
+    

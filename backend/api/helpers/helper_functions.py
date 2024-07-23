@@ -1,4 +1,4 @@
-from .models import BasicTickerData, DetailedTickerData, HistoricalTickerData, FavoriteTickerData
+from ..models import BasicTickerData, DetailedTickerData, HistoricalTickerData, FavoriteTickerData
 from datetime import date, timedelta
 import requests
 import os
@@ -7,6 +7,8 @@ import os
 def get_detailed_data(symbol):
     try:
         ticker = BasicTickerData.objects.get(symbol=symbol)
+        if DetailedTickerData.objects.filter(basic_data=ticker).exists():
+            return DetailedTickerData.objects.get(basic_data=ticker)
         response = requests.get(f"https://financialmodelingprep.com/api/v3/profile/{ticker.symbol}?apikey={os.environ.get('FMP_API_KEY')}")
         response.raise_for_status()
         detailed_data = response.json()[0]
@@ -36,7 +38,6 @@ def get_detailed_data(symbol):
 def get_historical_data(symbol, end_date=None):
     start_date = date.today().strftime("%Y-%m-%d")
     try:
-        
         basic_info = BasicTickerData.objects.get(symbol=symbol)
         detailed_info = DetailedTickerData.objects.get(basic_data=basic_info)
         if end_date is None:
@@ -58,6 +59,8 @@ def get_historical_data(symbol, end_date=None):
 
     # Create HistoricalTickerData objects
     for data in historical_info:
+        if HistoricalTickerData.objects.filter(basic_data=basic_info, date=data["date"]).exists():
+            continue  # Skip creating the object if it already exists
         HistoricalTickerData.objects.create(
             **data,
             basic_data=basic_info,
@@ -70,3 +73,10 @@ def is_most_recent_friday(given_date):
     # Calculate the most recent Friday from today's date
     most_recent_friday = today - timedelta(days=(today.weekday() + 3) % 7)
     return given_date == most_recent_friday
+
+def fetch_news_articles(symbol, limit=5):
+    try:
+        result = requests.get(f"https://api.polygon.io/v2/reference/news?ticker={symbol}&order=desc&limit={limit}&sort=published_utc&apiKey={os.environ.get("POLYGON_API_KEY")}").json()["results"]
+        return result
+    except Exception as e:
+        raise Exception(f"An error occurred: {e}")

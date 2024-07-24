@@ -14,7 +14,7 @@ class CreateUserView(generics.CreateAPIView):
     serializer_class = UserSerializer  # Serializer class to handle user data
     permission_classes = [AllowAny]  # Allow any user to access this view (no authentication required)
 
-# Finding and showing the logged-in User
+# Reading, Updating, and Deleting the logged-in User
 class UserProfileActions(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer  # Serializer class to handle user data
     permission_classes = [IsAuthenticated]  # Only authenticated users can access this view
@@ -27,7 +27,7 @@ class UserProfileActions(generics.RetrieveUpdateDestroyAPIView):
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]  # Only authenticated users can access this view
 
-    def post(self, request):
+    def put(self, request):
         serializer = ChangePasswordSerializer(data=request.data)  # Initialize the serializer with request data
         if serializer.is_valid():
             user = request.user
@@ -216,7 +216,7 @@ class TickerSearchView(APIView):
     def get(self, request):
         try:
             # Get the search query and limit from the request query parameters
-            search_query = request.query_params.get('search_query', "")
+            search_query = request.query_params.get('symbol', "")
             limit = int(request.query_params.get('limit', 10))  # Default to 10 results if not specified
             
             if search_query != "":

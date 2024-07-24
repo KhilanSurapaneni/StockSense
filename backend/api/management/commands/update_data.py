@@ -42,7 +42,7 @@ class Command(BaseCommand):
                 ]):
                     if BasicTickerData.objects.filter(symbol=ticker["symbol"]).exists():
                         # Update existing ticker data
-                        BasicTickerData.objects.filter(symbol=ticker["symbol"]).update(**ticker)
+                        BasicTickerData.objects.filter(symbol=ticker["symbol"]).update(**ticker, updated_at=date.today())
                     else:
                         # Create new ticker data
                         BasicTickerData.objects.create(**ticker)
@@ -72,7 +72,7 @@ class Command(BaseCommand):
 
                 # Update or create DetailedTickerData objects
                 if DetailedTickerData.objects.filter(basic_data=ticker.basic_data).exists():
-                    DetailedTickerData.objects.filter(basic_data=ticker.basic_data).update(**detailed_data)
+                    DetailedTickerData.objects.filter(basic_data=ticker.basic_data).update(**detailed_data, updated_at=date.today())
                 else:
                     DetailedTickerData.objects.create(**detailed_data, basic_data=ticker.basic_data)
             

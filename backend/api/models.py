@@ -113,7 +113,8 @@ class FavoriteTickerData(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.basic_data.symbol}"
-    
+
+# We will load this from the News API once every single day along with the basic ticker data
 class GeneralNews(models.Model):
     author = models.CharField(max_length=255)  # Adding a max_length constraint
     title = models.TextField()

@@ -5,18 +5,12 @@ djangorestframework
 djangorestframework-simplejwt
 PyJWT
 pytz
-sqlparse
-psycopg2-binary
 python-dotenv
 
 # Additional dependencies for AI, Celery, and Redis
 celery
 redis
-torch
-pandas
-numpy
 requests
-gunicorn
 
 # Development and Testing tools
 django-debug-toolbar

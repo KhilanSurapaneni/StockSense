@@ -107,7 +107,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 import dj_database_url
 
-DATABASES = {'default': dj_database_url.config(default='postgresql://postgres:HfEpKyTXGMVwQLuPGQGNdSaTMUOKHqxq@roundhouse.proxy.rlwy.net:20352/railway')}
+DATABASES = {'default': dj_database_url.config(default= os.getenv("PG_URL"))}
 
 # DATABASES = {
 #    'default': {

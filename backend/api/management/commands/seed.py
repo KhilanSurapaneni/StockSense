@@ -20,29 +20,35 @@ class Command(BaseCommand):
         self.stdout.write('Seeding the database...')
 
         try:
+            self.stdout.write('Seeding General News...')
             seed_general_news()
             self.stdout.write(self.style.SUCCESS('General News seeding completed.'))
 
+            self.stdout.write('Seeding Basic Ticker Data...')
             seed_basic_ticker_data()
             self.stdout.write(self.style.SUCCESS('Basic Ticker Data seeding completed.'))
 
+            self.stdout.write('Seeding Detailed Ticker Data...')
             seed_detailed_ticker_data()
             self.stdout.write(self.style.SUCCESS('Detailed Ticker Data seeding completed.'))
 
             detailed_ticker_data = DetailedTickerData.objects.all()
 
+            self.stdout.write('Seeding Historical Ticker Data...')
             for ticker in detailed_ticker_data:
                 seed_historical_ticker_data(ticker.basic_data.symbol)
 
             self.stdout.write(self.style.SUCCESS('Historical Ticker Data seeding completed.'))
-
+            
+            self.stdout.write('Seeding Favorite Ticker Data...')
             seed_favorite_ticker_data()
             self.stdout.write(self.style.SUCCESS('Favorite Ticker Data seeding completed.'))
 
+            self.stdout.write(self.style.SUCCESS('Database seeding completed.'))
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"An error occurred: {e}"))
 
-        self.stdout.write(self.style.SUCCESS('Database seeding completed.'))
+        
 
 
 def seed_basic_ticker_data():
@@ -150,6 +156,7 @@ def seed_favorite_ticker_data():
             user_id=user_id_2,
             basic_data=ticker
         )
+
 
 def seed_general_news():
     try:

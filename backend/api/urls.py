@@ -2,6 +2,9 @@ from django.urls import path
 from .views import CreateUserView, UserProfileActions, ChangePasswordView, CombinedTickerDetailView, FavoriteTickersView, TickerSearchView, DashboardView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+# update_data command is called every 30 minutes to update, basic_ticker_data, detailed_ticker_data (for favorited tickers only), historical_ticker_data (for favorited tickers only), and general_news_data
+  # implemenation is in management/commands/update_data.py, scheduled with djano-celery-beat, redis, and celery
+
 urlpatterns = [
     path("register/", CreateUserView.as_view(), name="register"),
     path("token/", TokenObtainPairView.as_view(), name="login"),
@@ -51,5 +54,3 @@ urlpatterns = [
 # ticker/<str:symbol>/
  # GET:
    # Returns basic, detailed, and historical ticker data for a specified ticker, as well as the latest news articles about the ticker
-     
-     

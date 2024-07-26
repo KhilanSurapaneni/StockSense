@@ -14,3 +14,14 @@ services:
       - .env
     depends_on:
       - redis
+  celery:
+    container_name: celery
+    command: celery -A backend worker -l INFO
+    build:
+      context: ./backend
+    volumes:
+      - ./backend:/usr/src/app/
+    env_file:  # Use `env_file` to properly load environment variables
+      - .env
+    depends_on:
+      - redis

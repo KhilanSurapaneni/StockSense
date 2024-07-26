@@ -2,11 +2,11 @@ FROM python:3.12.4-alpine
 
 WORKDIR /usr/src/app
 
-# prevents python from writing pycache files
-ENV PYTHONDONTWRITEBYTECODE 1
+# Prevent Python from writing pycache files
+ENV PYTHONDONTWRITEBYTECODE=1
 
-# ensure Python is sent directly to the terminal
-ENV PYTHONUNBUFFERED 1
+# Ensure Python output is sent directly to the terminal
+ENV PYTHONUNBUFFERED=1
 
 RUN pip install --upgrade pip
 

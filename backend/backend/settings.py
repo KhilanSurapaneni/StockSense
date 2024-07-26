@@ -14,13 +14,13 @@ from pathlib import Path  # This helps us work with file paths easily.
 from datetime import timedelta  # This allows us to set time durations.
 from dotenv import load_dotenv  # This helps us load environment variables from a .env file.
 import os  # This allows us to interact with the operating system.
+from celery.schedules import crontab  # Import crontab for Celery beat schedule
 
 # Load environment variables from a .env file.
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',  # Framework for serving static files.
     "api",  # Our custom app named 'api' this is where the authentication stuff will be hosted.
     "rest_framework",  # Django REST framework.
-    "corsheaders"  # Handling Cross-Origin Resource Sharing (CORS).
+    "corsheaders",  # Handling Cross-Origin Resource Sharing (CORS).
+    'django_celery_beat',  # Django Celery Beat for periodic tasks
 ]
 
 MIDDLEWARE = [
@@ -94,31 +95,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 import dj_database_url
 
-DATABASES = {'default': dj_database_url.config(default= os.getenv("PG_URL"))}
-
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': 'railway',
-#        'USER': 'postgres',
-#        'PASSWORD': 'HfEpKyTXGMVwQLuPGQGNdSaTMUOKHqxq',
-#        'HOST': '',
-#        'PORT': '5432',
-#    }
-# }
+DATABASES = {'default': dj_database_url.config(default=os.getenv("PG_URL"))}  # Connecting to the railway instance for the database
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -138,7 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -150,7 +131,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
@@ -161,9 +141,20 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Celery settings
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER', "redis://redis:6379/0")
 CELERY_RESULT_BACKEND = os.getenv('CELERY_BACKED', "redis://redis:6379/0")
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_TIMEZONE = 'America/Los_Angeles'  # Set Celery timezone to Los Angeles
+
+# Celery Beat settings
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BEAT_SCHEDULE = {
+    "update_data": {
+        "task": "api.tasks.update_data",
+        "schedule": crontab(minute="*/30"),  # Run every 30 minutes
+    },
+}
 
 # CORS settings.
 CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins to make requests (not secure for production).

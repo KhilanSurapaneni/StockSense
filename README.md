@@ -14,10 +14,10 @@
 ### User Authentication
 - **Sign Up:** Users can create an account using their email and a password.
 - **Login:** Registered users can log in to access personalized features.
-- **Profile Management:** Users can manage their profile information and view saved stocks.
+- **Profile Management:** Users can manage their profile information and view favorited stocks.
 
 ### Dashboard
-- **Overview:** Provides a summary of the stock market's current state, highlighting major indices and trends.
+- **Overview:** Provides a summary of the stock market's current state, highlighting major indices and trends, as well as general business news.
 - **Favorite Stocks:** Displays a quick view of the user's favorite stocks.
 
 ### Stock Search and Visualization
@@ -42,53 +42,14 @@
 - **Django (Python):** Serving the API and handling business logic.
 - **Django REST Framework:** Creating RESTful APIs.
 - **Celery:** Task queue for handling asynchronous tasks (e.g., fetching news).
+- **Redis:** Message broker for Celery tasks.
 
 ### Database
-- **PostgreSQL:** Storing user data, stock information, and historical data.
+- **PostgreSQL:** Storing user data, stock information, and historical data. Hosted on railway.app.
 
 ### AI and Machine Learning
 - **PyTorch:** Fine-tuning a Long Short-Term Memory (LSTM) model for stock price predictions.
 - **Pandas/Numpy:** Data manipulation and preprocessing.
-
-## Setup and Installation
-### Prerequisites
-- Node.js and npm installed
-- Python and pip installed
-- MongoDB installed and running
-
-### Backend Setup
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/stocksense.git
-   cd stocksense/backend
-   ```
-2. Create a virtual environment and activate it:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   ```
-3. Install the required packages:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Run the Django development server:
-   ```bash
-   python manage.py runserver
-   ```
-
-### Frontend Setup
-1. Navigate to the frontend directory:
-   ```bash
-   cd ../frontend
-   ```
-2. Install the required packages:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm start
-   ```
 
 ## Usage
 ### Sign Up and Login

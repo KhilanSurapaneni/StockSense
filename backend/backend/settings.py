@@ -152,7 +152,7 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_BEAT_SCHEDULE = {
     "update_data": {
         "task": "api.tasks.update_data",
-        "schedule": crontab(minute="*/30"),  # Run every 30 minutes
+        "schedule": crontab(minute="*/30"),  # Updates data every 30 minutes.
     },
 }
 

@@ -74,7 +74,11 @@ class Command(BaseCommand):
                 if DetailedTickerData.objects.filter(basic_data=ticker.basic_data).exists():
                     DetailedTickerData.objects.filter(basic_data=ticker.basic_data).update(**detailed_data, updated_at=date.today())
                 else:
-                    DetailedTickerData.objects.create(**detailed_data, basic_data=ticker.basic_data)
+                    if detailed_data["ipoDate"] is not None and detailed_data["ipoDate"] != "":
+                        pass
+                    else:
+                        detailed_data.pop("ipoDate", None)
+                    DetailedTickerData.objects.create(**detailed_data, basic_data=ticker.basic_data, updated_at=date.today())
             
             # Update the HistoricalTickerData objects
             latest_entry = HistoricalTickerData.objects.filter(basic_data=ticker.basic_data).order_by('-date').first()

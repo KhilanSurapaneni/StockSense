@@ -21,12 +21,12 @@ class DetailedTickerData(models.Model):
     basic_data = models.OneToOneField(BasicTickerData, on_delete=models.CASCADE, related_name='detailed_data')
     currency = models.CharField(max_length=255)
     changes = models.DecimalField(max_digits=20, decimal_places=8)
-    ipoDate = models.DateField()
     beta = models.DecimalField(max_digits=12, decimal_places=10)  # Adjusted precision and scale
     volAvg = models.BigIntegerField()
     mktCap = models.BigIntegerField()
 
     # Optional financial information
+    ipoDate = models.DateField(blank=True, null=True)
     lastDiv = models.DecimalField(max_digits=12, decimal_places=10, blank=True, null=True)  # Adjusted precision and scale
     dcfDiff = models.DecimalField(max_digits=20, decimal_places=8, blank=True, null=True)
     dcf = models.DecimalField(max_digits=20, decimal_places=8, blank=True, null=True)

@@ -61,6 +61,19 @@ services:
       - .env
     depends_on:
       - redis
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    command: npm run dev
+    volumes:
+      - ./frontend:/usr/src/app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - django
 
 volumes:
   postgres_data:

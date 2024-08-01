@@ -1,4 +1,11 @@
 services:
+  db:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+  
   redis:
     image: redis:7.0.11-alpine
 
@@ -27,6 +34,7 @@ services:
       - .env
     depends_on:
       - redis
+      - db
 
   celery_flower:
     container_name: celery_flower
@@ -53,3 +61,6 @@ services:
       - .env
     depends_on:
       - redis
+
+volumes:
+  postgres_data:

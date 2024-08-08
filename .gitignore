@@ -6,10 +6,10 @@ __pycache__
 db.sqlite3
 media
 
-# Backup files # 
-*.bak 
+# Backup files #
+*.bak
 
-# If you are using PyCharm # 
+# If you are using PyCharm #
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -45,94 +45,159 @@ out/
 # JIRA plugin
 atlassian-ide-plugin.xml
 
-# Python # 
-*.py[cod] 
-*$py.class 
+# Python #
+*.py[cod]
+*$py.class
 
-# Distribution / packaging 
-.Python build/ 
-develop-eggs/ 
-dist/ 
-downloads/ 
-eggs/ 
-.eggs/ 
-lib/ 
-lib64/ 
-parts/ 
-sdist/ 
-var/ 
-wheels/ 
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
 *.whl
-*.egg-info/ 
-.installed.cfg 
-*.egg 
-*.manifest 
-*.spec 
+*.egg-info/
+.installed.cfg
+*.egg
+*.manifest
+*.spec
 
-# Installer logs 
-pip-log.txt 
-pip-delete-this-directory.txt 
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
 
-# Unit test / coverage reports 
-htmlcov/ 
-.tox/ 
-.coverage 
-.coverage.* 
-.cache 
-.pytest_cache/ 
-nosetests.xml 
-coverage.xml 
-*.cover 
-.hypothesis/ 
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
 
-# Jupyter Notebook 
-.ipynb_checkpoints 
+# Jupyter Notebook
+.ipynb_checkpoints
 
-# pyenv 
-.python-version 
+# pyenv
+.python-version
 
-# celery 
-celerybeat-schedule.* 
+# celery
+celerybeat-schedule.*
 
-# SageMath parsed files 
-*.sage.py 
+# SageMath parsed files
+*.sage.py
 
-# Environments 
-.env 
-.venv 
-env/ 
-venv/ 
-ENV/ 
-env.bak/ 
-venv.bak/ 
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
-# mkdocs documentation 
-/site 
+# mkdocs documentation
+/site
 
-# mypy 
-.mypy_cache/ 
+# mypy
+.mypy_cache/
 
-# Sublime Text # 
-*.tmlanguage.cache 
-*.tmPreferences.cache 
-*.stTheme.cache 
-*.sublime-workspace 
-*.sublime-project 
+# Sublime Text #
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
 
-# sftp configuration file 
-sftp-config.json 
+# sftp configuration file
+sftp-config.json
 
-# Package control specific files Package 
-Control.last-run 
-Control.ca-list 
-Control.ca-bundle 
-Control.system-ca-bundle 
-GitHub.sublime-settings 
+# Package control specific files
+Package Control.last-run
+Control.ca-list
+Control.ca-bundle
+Control.system-ca-bundle
+GitHub.sublime-settings
 
-# Visual Studio Code # 
-.vscode/* 
-!.vscode/settings.json 
-!.vscode/tasks.json 
-!.vscode/launch.json 
-!.vscode/extensions.json 
+# Visual Studio Code #
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .history
+
+# Node.js #
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# nyc test coverage
+.nyc_output
+
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# Bower dependency directory (https://bower.io/)
+bower_components/
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
+jspm_packages/
+
+# TypeScript v1 declaration files
+typings/
+
+# Optional TypeScript cache
+*.tsbuildinfo
+
+# Optional Stylelint cache
+.stylelintcache
+
+# React Native #
+.expo/
+
+# Next.js build output
+.next/
+out/
+
+# Nuxt.js build output
+.nuxt/
+dist/
+
+# Gatsby files
+.cache/
+public/
+
+# Vue.js generated files
+/dist/
+
+# SvelteKit build / debug output
+/.svelte-kit/
+build/

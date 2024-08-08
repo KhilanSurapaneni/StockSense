@@ -4,7 +4,7 @@ function App() {
 
   return (
     <>
-      <h1>StockSensical</h1>
+      <h1>StockSense</h1>
     </>
   )
 }

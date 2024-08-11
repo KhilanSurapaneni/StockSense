@@ -1,10 +1,11 @@
-import './App.css'
+
 
 function App() {
+  
 
   return (
     <>
-      <h1>StockSense</h1>
+      <h1>StockSense</h1>      
     </>
   )
 }

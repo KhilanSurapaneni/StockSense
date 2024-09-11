@@ -1,5 +1,7 @@
 # StockSense: AI-Powered Stock Market Analysis and Prediction
 
+### In Progress -- Currently Paused Work Due to Other Obligations
+
 ## Introduction
 **StockSense** is a web application designed to provide users with comprehensive stock market analysis and AI-based predictions. By leveraging historical stock data, users can visualize trends, compare stocks, and receive future price predictions. The application aims to blend powerful data analytics with an intuitive user experience.
 

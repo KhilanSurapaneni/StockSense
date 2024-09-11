@@ -13,11 +13,11 @@ services:
     container_name: django
     build:
       context: ./backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8080
     volumes:
       - ./backend:/usr/src/app/
     ports:
-      - "8000:8000"
+      - "8080:8080"
     env_file:
       - .env
     depends_on:
@@ -61,19 +61,6 @@ services:
       - .env
     depends_on:
       - redis
-  # frontend:
-  #   container_name: frontend
-  #   build:
-  #     context: ./frontend
-  #   command: npm run dev
-  #   volumes:
-  #     - ./frontend:/usr/src/app
-  #   ports:
-  #     - "8080:8080"
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     - django
 
 volumes:
   postgres_data:

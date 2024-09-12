@@ -92,7 +92,8 @@ Note that some of the functionality is proposed and something for me as the deve
 - Django serves historical stock data through RESTful API endpoints. The data is stored in PostgreSQL.
 
 ### AI Predictions
-- Historical data is preprocessed using Pandas and Numpy. Machine learning models are built and trained using PyTorch, specifically fine-tuning a Long Short-Term Memory (LSTM) model for stock price predictions. Predictions are served through API endpoints.
+- Historical data is preprocessed using Pandas and Numpy. Machine learning models are built and trained using PyTorch, specifically fine-tuning a Long Short-Term Memory (LSTM) model for stock price predictions.
+- Predictions are served through API endpoints. (IN PROGRESS)
 - [**Dataset**](https://www.kaggle.com/datasets/borismarjanovic/price-volume-data-for-all-us-stocks-etfs/data)
 
 ### News Integration
